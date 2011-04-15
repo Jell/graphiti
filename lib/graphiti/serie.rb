@@ -7,15 +7,13 @@ module Graphiti
         send("#{key}=", value) if respond_to? "#{key}="
       end
       self.data   ||= []
-      self.type   ||= :raw
     end
 
     def points
-      return data if type == :raw
 
       x_data = data.map(&:"#{x_attribute}")
       x_data = x_data.map{ |entry| to_js_time(entry) } if x_data.first.is_a?(Time)
-      x_data.shift unless type == :attribute
+      x_data.shift unless type == :default
 
       y_data = data.map(&:"#{y_attribute}") unless type == :rate
       if type == :diff
@@ -36,6 +34,10 @@ module Graphiti
       y_data_sampled = y_data.each_slice(decimation_rate).map {|y| y.compact!; y.reduce(:+) / y.size}
 
       [x_data_sampled, y_data_sampled].transpose
+    end
+
+    def json_data
+      "{label: \"#{name}\", data: #{points}}"
     end
 
     def to_js_time(time)

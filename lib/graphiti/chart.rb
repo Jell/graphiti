@@ -1,6 +1,7 @@
 module Graphiti
   class Chart
-    attr_accessor :name, :series, :zoom_to,:width, :height
+    attr_accessor :name, :data, :x_attribute, :y_attributes, :type,
+                  :zoom_to,:width, :height, :labels, :colors
 
     DEFAULT_PIXEL_WIDTH = 400
     DEFAULT_PIXEL_HEIGHT = 300
@@ -8,9 +9,23 @@ module Graphiti
       args.each do |key, value|
         send("#{key}=", value) if respond_to? "#{key}="
       end
-      self.series ||= []
+      self.type   ||= :default
       self.width  ||= DEFAULT_PIXEL_WIDTH
       self.height ||= DEFAULT_PIXEL_HEIGHT
+      self.labels ||= []
+      self.colors ||= []
+    end
+
+    def series
+      y_attributes.each_with_index.map do |y_attribute, index|
+        Serie.new(
+          name: labels[index] || y_attribute,
+          data: data,
+          type: type,
+          x_attribute: x_attribute,
+          y_attribute: y_attribute,
+        )
+      end
     end
 
     def html
@@ -26,11 +41,11 @@ module Graphiti
             points: { show: false, fill: true, radius: 2 },
             shadowSize: 4
           },
-          colors: [ "#0000dd" ],
+          colors: #{colors},
           selection: { mode: "xy" }
         };
       var placeholder = $("#diagram-#{name}");
-      $.plot(placeholder, #{series.map(&:points)}, options);
+      $.plot(placeholder, [#{series.map(&:json_data).join(",")}], options);
 
       placeholder.bind("plotselected", function (event, ranges) {
         var points = #{series.first.points};

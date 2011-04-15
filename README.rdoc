@@ -1,6 +1,22 @@
 = graphiti
 
-Description goes here.
+== Install
+
+    gem install graphiti
+
+Graphiti requires jquery.flot, jquery.flot.selection, jquery.flot.stack and excanvas, make sure to include them in your page.
+
+== Example
+
+    snapshots = Snapshot.all
+    chart = Graphiti::Chart.new(
+      name: "conversion_rates",
+      data: snapshots,
+      x_attribute: 'created_at',
+      y_attributes: %w[view_count click_count],
+      colors: ["#0000dd", "#dd0000"]
+    )
+    chart.html
 
 == Contributing to graphiti
  
