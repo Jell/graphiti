@@ -38,5 +38,13 @@ module Graphiti
       [x_data_sampled, y_data_sampled].transpose
     end
 
+    def to_js_time(time)
+      1000 * time.to_f
+    end
+
+    def to_unix_time(time)
+      Time.at(time.to_i / 1000)
+    end
+
   end
 end

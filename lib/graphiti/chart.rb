@@ -30,12 +30,10 @@ module Graphiti
           selection: { mode: "xy" }
         };
       var placeholder = $("#diagram-#{name}");
-      #{
-        series.map{|serie| "$.plot(placeholder, #{serie.points}, options);"}.join("\n")
-      }
+      $.plot(placeholder, #{series.map(&:points)}, options);
 
       placeholder.bind("plotselected", function (event, ranges) {
-        var points = #{series.first.points}};
+        var points = #{series.first.points};
         selected = [];
         for(var i = 0; i < points.length; i++) {
           var x = points[i][0];
@@ -51,7 +49,6 @@ module Graphiti
 
     </script>
       HTML
-      html.respond_to? :html_safe ? html.html_safe : html
     end
 
   end
