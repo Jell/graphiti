@@ -13,10 +13,10 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "graphiti"
-  gem.homepage = "http://github.com/Jell/graphiti"
+  gem.homepage = "http://github.com/icehouse/graphiti"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Ruby wrapper for jQuery Flot}
+  gem.description = %Q{longer description of your gem}
   gem.email = "jean-louis@icehouse.se"
   gem.authors = ["Jell"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
