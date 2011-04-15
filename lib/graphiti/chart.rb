@@ -17,7 +17,7 @@ module Graphiti
     end
 
     def series
-      y_attributes.each_with_index.map do |y_attribute, index|
+      @series ||= y_attributes.each_with_index.map do |y_attribute, index|
         Serie.new(
           name: labels[index] || y_attribute,
           data: data,
@@ -48,17 +48,22 @@ module Graphiti
       $.plot(placeholder, [#{series.map(&:json_data).join(",")}], options);
 
       placeholder.bind("plotselected", function (event, ranges) {
-        var points = #{series.first.points};
-        selected = [];
+        var points = #{series.map(&:points).reduce(:+)};
+        x_selected = [];
+        y_selected = [];
         for(var i = 0; i < points.length; i++) {
           var x = points[i][0];
           var y = points[i][1];
-          if(x >= ranges.xaxis.from.toFixed(1) && x <= ranges.xaxis.to.toFixed(1) &&
-             y >= ranges.yaxis.from.toFixed(1) && y <= ranges.yaxis.to.toFixed(1)) {
-            selected.push(parseFloat(x));   
+          if(x >= parseFloat(ranges.xaxis.from) && x <= parseFloat(ranges.xaxis.to) &&
+             y >= parseFloat(ranges.yaxis.from) && y <= parseFloat(ranges.yaxis.to)) {
+            x_selected.push(parseFloat(x)#{"/1000" if series.first.time_serie?});
+            y_selected.push(parseFloat(y))
           }
         }
-        var url = "#{zoom_to}?from_js_time=" + Math.min.apply( Math, selected ) + "&to_js_time=" + Math.max.apply( Math, selected );
+        var url = "#{zoom_to}?from_x=" + Math.min.apply( Math, x_selected ) +
+                            "&to_x=" + Math.max.apply( Math, x_selected ) +
+                            "&from_y=" + Math.min.apply( Math, y_selected ) +
+                            "&to_y=" + Math.max.apply( Math, y_selected );
         location = url;
       });
 

@@ -10,9 +10,9 @@ module Graphiti
     end
 
     def points
-
+      return @points if @points
       x_data = data.map(&:"#{x_attribute}")
-      x_data = x_data.map{ |entry| to_js_time(entry) } if x_data.first.is_a?(Time)
+      x_data = x_data.map{ |entry| to_js_time(entry) } if time_serie?
       x_data.shift unless type == :default
 
       y_data = data.map(&:"#{y_attribute}") unless type == :rate
@@ -33,7 +33,11 @@ module Graphiti
       x_data_sampled = x_data.each_slice(decimation_rate).map {|x| x.compact!; x.empty? ? nil : x.reduce(:+) / x.size}
       y_data_sampled = y_data.each_slice(decimation_rate).map {|y| y.compact!; y.reduce(:+) / y.size}
 
-      [x_data_sampled, y_data_sampled].transpose
+      @points = [x_data_sampled, y_data_sampled].transpose
+    end
+
+    def time_serie?
+      data.first.send(x_attribute).is_a? Time
     end
 
     def json_data
