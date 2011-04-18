@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{graphiti}
-  s.version = "0.0.1"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jell"]
-  s.date = %q{2011-04-15}
+  s.date = %q{2011-04-18}
   s.description = %q{longer description of your gem}
   s.email = %q{jean-louis@icehouse.se}
   s.extra_rdoc_files = [
@@ -29,6 +29,8 @@ Gem::Specification.new do |s|
     "lib/graphiti.rb",
     "lib/graphiti/chart.rb",
     "lib/graphiti/serie.rb",
+    "test/graphiti/test_chart.rb",
+    "test/graphiti/test_serie.rb",
     "test/helper.rb",
     "test/test_graphiti.rb"
   ]
@@ -38,6 +40,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.6.2}
   s.summary = %q{Ruby wrapper for jQuery Flot}
   s.test_files = [
+    "test/graphiti/test_chart.rb",
+    "test/graphiti/test_serie.rb",
     "test/helper.rb",
     "test/test_graphiti.rb"
   ]
@@ -47,17 +51,20 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<shoulda>, [">= 0"])
+      s.add_development_dependency(%q<mocha>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
     else
       s.add_dependency(%q<shoulda>, [">= 0"])
+      s.add_dependency(%q<mocha>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
     end
   else
     s.add_dependency(%q<shoulda>, [">= 0"])
+    s.add_dependency(%q<mocha>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])
