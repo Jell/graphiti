@@ -72,10 +72,20 @@ module Graphiti
     end
 
     context "#to_s" do
+      setup do
+        @chart = Chart.new
+        @html_string = "html"
+        @html_string.stubs(:html_safe).returns("html safe")
+        @chart.stubs(:html).returns(@html_string)
+      end
       should "return html content" do
-        chart = Chart.new
-        chart.stubs(:html).returns("html")
-        assert_equal "html", chart.to_s
+        assert_equal @html_string, @chart.to_s
+      end
+      should "set html_safe if available" do
+        test_string = ""
+        test_string.stubs(:respond_to?).returns(true)
+        @chart.stubs(:test_string).returns(test_string)
+        assert_equal "html safe", @chart.to_s
       end
     end
 
