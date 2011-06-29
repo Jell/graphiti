@@ -37,22 +37,30 @@ module Graphiti
         end
       end
 
+      @points = sample_data(x_data, y_data).transpose.select{|x, y| x && y}
+    end
+
+    def time_serie?
+      return false unless data.first
+      data.first.send(x_attribute).respond_to?(:to_time)
+    end
+
+    def json_data
+      "{label: \"#{name}\", data: #{points}}"
+    end
+
+    private
+
+    def sample_data(x_data, y_data)
+      return [x_data, y_data] unless x_data.first.respond_to?(:/)
+
       decimation_rate = x_data.length / Chart::DEFAULT_PIXEL_WIDTH
       decimation_rate = 1 if decimation_rate < 1
 
       x_data_sampled = x_data.each_slice(decimation_rate).map {|x| x.compact!; x.empty? ? nil : x.reduce(:+) / x.size}
       y_data_sampled = y_data.each_slice(decimation_rate).map {|y| y.compact!; y.empty? ? nil : y.reduce(:+) / y.size}
 
-      @points = [x_data_sampled, y_data_sampled].transpose.select{|x, y| x && y}
-    end
-
-    def time_serie?
-      return false unless data.first
-      data.first.send(x_attribute).is_a? Time
-    end
-
-    def json_data
-      "{label: \"#{name}\", data: #{points}}"
+      [x_data_sampled, y_data_sampled]
     end
 
   end

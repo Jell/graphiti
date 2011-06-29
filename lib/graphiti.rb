@@ -4,7 +4,7 @@ require 'graphiti/serie'
 module Graphiti
   class << self
     def to_js_time(time)
-      (time.to_f * 1000).to_i
+      (time.to_time.to_f * 1000).to_i
     end
 
     def to_unix_time(time)

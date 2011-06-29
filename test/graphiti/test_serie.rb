@@ -78,6 +78,18 @@ module Graphiti
           @serie.data = data
           assert_equal [[123456789000, 42]]*3, @serie.points
         end
+        should "map x data to js time also when Date is given" do
+          data = 3.times.map{Point.new(Time.at(123456789).to_date, 42) }
+          @serie.data = data
+          assert_equal [[123375600000, 42]]*3, @serie.points
+        end
+      end
+      context "when x_attribute is not an arithmetic value" do
+        should "work anyway" do
+          data = 3.times.map{|i| Point.new("Entry #{i}", 42) }
+          @serie.data = data
+          assert_equal [["Entry 0", 42], ["Entry 1", 42], ["Entry 2", 42]], @serie.points
+        end
       end
       context "when there is more data that pixels on the graph" do
         should "decimate data" do
