@@ -53,6 +53,28 @@ module Graphiti
         assert_equal [:y,:z],  chart.series.map(&:y_attribute)
         assert_equal [?a,?b],  chart.series.map(&:name)
       end
+      should "return a serie for each given y_attribute and each serie in data if data is a hash" do
+        data = {
+          first_serie:  3.times.map{Point.new(1,2,3)},
+          second_serie: 3.times.map{Point.new(1,2,3)},
+        }
+        chart = Chart.new data: data, x_attribute: :x, y_attributes: [:y, :z], labels: ["a","b"]
+        assert_equal 4, chart.series.length
+        assert_equal [
+          data[:first_serie],
+          data[:second_serie],
+          data[:first_serie],
+          data[:second_serie]
+        ], chart.series.map(&:data)
+        assert_equal [:x,:x,:x,:x],  chart.series.map(&:x_attribute)
+        assert_equal [:y,:y,:z,:z],  chart.series.map(&:y_attribute)
+        assert_equal [
+          'a first_serie',
+          'a second_serie',
+          'b first_serie',
+          'b second_serie'
+        ], chart.series.map(&:name)
+      end
     end
 
     context "#y_attribute=" do

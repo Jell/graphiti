@@ -21,16 +21,10 @@ module Graphiti
 
     def series
       @series ||= y_attributes.each_with_index.map do |y_attribute, index|
-        Serie.new(
-          name: labels[index] || y_attribute,
-          data: data,
-          type: type,
-          x_attribute: x_attribute,
-          y_attribute: y_attribute,
-        )
-      end
+        series_for(y_attribute, index)
+      end.flatten
     end
-    
+
     def y_attribute=(value)
       self.y_attributes = [value]
     end
@@ -110,6 +104,28 @@ module Graphiti
     end
 
     private
+
+    def series_for(y_attribute, index)
+      if data.is_a? Hash
+        data.map do |name, sub_data|
+          Serie.new(
+            name: (labels[index] || y_attribute).to_s + " " + name.to_s,
+            data: sub_data,
+            type: type,
+            x_attribute: x_attribute,
+            y_attribute: y_attribute,
+          )
+        end
+      else
+        Serie.new(
+          name: labels[index] || y_attribute,
+          data: data,
+          type: type,
+          x_attribute: x_attribute,
+          y_attribute: y_attribute,
+        )
+      end
+    end
 
     def test_string
       ""
