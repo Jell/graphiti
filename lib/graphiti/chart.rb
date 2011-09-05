@@ -90,10 +90,10 @@ module Graphiti
     #{JS_TIME_TO_DATE_STRING if series.first.time_serie?}
 
     var url = "#{zoom_to + (zoom_to.include?('?') ? ?& : ??)}" +
-                         "from_x=" + from_x + "&" +
-                         "to_x="   + to_x   + "&" +
-                         "from_y=" + from_y + "&" +
-                         "to_y="   + to_y;
+                         "from_x=" + encodeURIComponent(from_x) + "&" +
+                         "to_x="   + encodeURIComponent(to_x)   + "&" +
+                         "from_y=" + encodeURIComponent(from_y) + "&" +
+                         "to_y="   + encodeURIComponent(to_y);
     location = url;
   });
 
